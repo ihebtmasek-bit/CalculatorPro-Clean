@@ -7,16 +7,30 @@ android {
     namespace 'com.calculatorpro.app'
 
     defaultConfig {
-        applicationId "com.calculatorpro.app"
+        applicationId "com.zcalculator.app"
         minSdk 21
         targetSdk 33
         versionCode 1
         versionName "1.0"
     }
 
+    signingConfigs {
+        release {
+            storeFile file('zcalculator.keystore')
+            storePassword 'zcalculator123'
+            keyAlias 'zcalculator'
+            keyPassword 'zcalculator123'
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
         release {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

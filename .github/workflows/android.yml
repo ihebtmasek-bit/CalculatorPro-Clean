@@ -1,4 +1,4 @@
-name: Android Build
+name: Build Signed Z-Calculator
 
 on: [push]
 
@@ -16,13 +16,32 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Build APK
+    - name: Generate release keystore
+      run: |
+        keytool -genkey -v \
+          -keystore zcalculator.keystore \
+          -alias zcalculator \
+          -keyalg RSA \
+          -keysize 2048 \
+          -validity 10000 \
+          -storepass zcalculator123 \
+          -keypass zcalculator123 \
+          -dname "CN=Z-Calculator, OU=Android, O=Z-Calculator, L=Paris, ST=France, C=FR"
+        
+    - name: Build signed APK and AAB
       run: |
         chmod +x gradlew
-        ./gradlew assembleDebug
+        ./gradlew assembleRelease
+        ./gradlew bundleRelease
         
-    - name: Upload APK
+    - name: Upload signed APK
       uses: actions/upload-artifact@v4
       with:
-        name: calculator-apk
-        path: app/build/outputs/apk/debug/*.apk
+        name: z-calculator-signed-apk
+        path: app/build/outputs/apk/release/*.apk
+        
+    - name: Upload signed AAB
+      uses: actions/upload-artifact@v4
+      with:
+        name: z-calculator-signed-aab
+        path: app/build/outputs/bundle/release/*.aab
