@@ -14,24 +14,16 @@ android {
         versionName "1.0"
     }
 
-    signingConfigs {
-        release {
-            storeFile file('../zcalculator.keystore')
-            storePassword 'zcalculator123'
-            keyAlias 'zcalculator'
-            keyPassword 'zcalculator123'
-        }
-    }
-
     buildTypes {
-        debug {
-            signingConfig signingConfigs.release
-        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
