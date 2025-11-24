@@ -20,29 +20,28 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
-    - name: Build APK
+    - name: Build release APK
       run: |
         chmod +x gradlew
         ./gradlew assembleRelease
         
     - name: Find and upload APK
       run: |
-        # Trouver tous les APK
         APK_FILE=$(find . -name "*.apk" -type f | grep release | head -1)
-        echo "APK found: $APK_FILE"
+        echo "Release APK found: $APK_FILE"
         
-        # Renommer et déplacer pour upload facile
         if [ -n "$APK_FILE" ]; then
-          cp "$APK_FILE" ./z-calculator-app.apk
-          echo "APK ready for upload: z-calculator-app.apk"
+          cp "$APK_FILE" ./z-calculator.apk
+          echo "APK ready for upload"
         else
-          echo "No APK file found!"
+          echo "No APK found! Listing all APKs:"
           find . -name "*.apk" -type f
+          exit 1
         fi
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: z-calculator-app
-        path: z-calculator-app.apk
+        path: z-calculator.apk
         retention-days: 30
