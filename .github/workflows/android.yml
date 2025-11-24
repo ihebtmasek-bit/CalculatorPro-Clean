@@ -45,3 +45,9 @@ jobs:
       with:
         name: z-calculator-signed-aab
         path: app/build/outputs/bundle/release/*.aab
+        
+    - name: Upload keystore (backup)
+      uses: actions/upload-artifact@v4
+      with:
+        name: z-calculator-keystore
+        path: zcalculator.keystore

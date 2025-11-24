@@ -4,7 +4,7 @@ plugins {
 
 android {
     compileSdk 33
-    namespace 'com.calculatorpro.app'
+    namespace 'com.zcalculator.app'
 
     defaultConfig {
         applicationId "com.zcalculator.app"
@@ -16,7 +16,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('zcalculator.keystore')
+            storeFile file('../zcalculator.keystore')
             storePassword 'zcalculator123'
             keyAlias 'zcalculator'
             keyPassword 'zcalculator123'
