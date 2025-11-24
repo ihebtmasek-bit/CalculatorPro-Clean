@@ -1,4 +1,4 @@
-name: Build Signed Android App
+name: Build Android App
 
 on:
   push:
@@ -20,25 +20,29 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
-    - name: Generate signing key
-      run: |
-        keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 -storepass android -keypass android -dname "CN=Android Debug,O=Android,C=US"
-        
-    - name: Build signed APK
+    - name: Build APK
       run: |
         chmod +x gradlew
         ./gradlew assembleRelease
         
-    - name: Upload signed APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: z-calculator-signed-apk
-        path: app/build/outputs/apk/release/app-release.apk
-        retention-days: 30
+    - name: Find and upload APK
+      run: |
+        # Trouver tous les APK
+        APK_FILE=$(find . -name "*.apk" -type f | grep release | head -1)
+        echo "APK found: $APK_FILE"
         
-    - name: Upload signed AAB
+        # Renommer et déplacer pour upload facile
+        if [ -n "$APK_FILE" ]; then
+          cp "$APK_FILE" ./z-calculator-app.apk
+          echo "APK ready for upload: z-calculator-app.apk"
+        else
+          echo "No APK file found!"
+          find . -name "*.apk" -type f
+        fi
+        
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: z-calculator-signed-aab
-        path: app/build/outputs/bundle/release/app-release.aab
+        name: z-calculator-app
+        path: z-calculator-app.apk
         retention-days: 30
