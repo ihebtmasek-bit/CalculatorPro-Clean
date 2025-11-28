@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest  # macOS a souvent moins de problèmes
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v4
@@ -17,16 +17,33 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Setup Android SDK 35
+    - name: Setup Android SDK 34
       uses: android-actions/setup-android@v3
       
-    - name: Build AAB
+    - name: Build Universal APK
       run: |
         chmod +x gradlew
-        ./gradlew clean bundleRelease --no-daemon --stacktrace
+        ./gradlew assembleRelease
         
-    - name: Upload AAB
+    - name: Convert APK to AAB using bundletool
+      run: |
+        # Télécharger bundletool
+        wget https://github.com/google/bundletool/releases/download/1.15.6/bundletool-all-1.15.6.jar
+        
+        # Créer un AAB à partir de l'APK
+        java -jar bundletool-all-1.15.6.jar build-bundle \
+          --modules=app/build/outputs/apk/release/app-release.apk \
+          --output=app/build/outputs/bundle/converted/app-converted.aab \
+          --overwrite
+          
+    - name: Upload Universal APK
       uses: actions/upload-artifact@v4
       with:
-        name: calculator-aab-api35-macos
-        path: app/build/outputs/bundle/release/
+        name: calculator-universal-apk
+        path: app/build/outputs/apk/release/app-release.apk
+        
+    - name: Upload Converted AAB
+      uses: actions/upload-artifact@v4
+      with:
+        name: calculator-converted-aab
+        path: app/build/outputs/bundle/converted/app-converted.aab

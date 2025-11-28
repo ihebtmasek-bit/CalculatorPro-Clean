@@ -3,18 +3,15 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdk 34
     namespace 'com.zcalculator.app'
 
     defaultConfig {
         applicationId "com.zcalculator.app"
         minSdk 21
         targetSdk 35
-        versionCode 7
-        versionName "2.0"
-        
-        multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
+        versionCode 9
+        versionName "2.2"
     }
 
     signingConfigs {
@@ -34,19 +31,12 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-    
-    buildFeatures {
-        viewBinding true
+    // DÉSACTIVER AAPT2 POUR ÉVITER LES ERREURS
+    aaptOptions {
+        useNewCruncher false
     }
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.webkit:webkit:1.10.0'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.multidex:multidex:2.0.1'
 }
