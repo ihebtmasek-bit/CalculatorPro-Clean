@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 35
     namespace 'com.zcalculator.app'
 
     defaultConfig {
         applicationId "com.zcalculator.app"
         minSdk 21
-        targetSdk 33
+        targetSdk 35
         versionCode 1
         versionName "1.0"
     }
@@ -36,12 +36,17 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.webkit:webkit:1.6.0'
+    implementation 'androidx.webkit:webkit:1.10.0'
+    implementation 'com.google.android.material:material:1.12.0'
 }
