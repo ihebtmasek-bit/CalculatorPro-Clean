@@ -1,4 +1,4 @@
-name: Android Build
+name: Android Build API 35
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest  # macOS a souvent moins de problèmes
     
     steps:
     - uses: actions/checkout@v4
@@ -18,28 +18,15 @@ jobs:
         distribution: 'temurin'
         
     - name: Setup Android SDK 35
-      run: |
-        # Télécharger et installer SDK 35 manuellement
-        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-        unzip commandlinetools-linux-9477386_latest.zip -d cmdline-tools
-        mv cmdline-tools/cmdline-tools cmdline-tools/latest
-        
-        export ANDROID_HOME=$PWD
-        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-        
-        # Accepter les licenses
-        yes | sdkmanager --licenses
-        
-        # Installer SDK 35
-        sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
-        
-    - name: Build Release AAB
+      uses: android-actions/setup-android@v3
+      
+    - name: Build AAB
       run: |
         chmod +x gradlew
-        ./gradlew bundleRelease
+        ./gradlew clean bundleRelease --no-daemon --stacktrace
         
     - name: Upload AAB
       uses: actions/upload-artifact@v4
       with:
-        name: calculator-aab-api35
+        name: calculator-aab-api35-macos
         path: app/build/outputs/bundle/release/
