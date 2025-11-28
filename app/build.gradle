@@ -3,46 +3,27 @@ plugins {
 }
 
 android {
-    compileSdk 34  // Temporairement API 34 pour stabilité
+    compileSdk 35
     namespace 'com.zcalculator.app'
 
     defaultConfig {
         applicationId "com.zcalculator.app"
         minSdk 21
-        targetSdk 34  // Temporairement API 34
+        targetSdk 35
         versionCode 1
         versionName "1.0"
     }
 
-    signingConfigs {
-        debug {
-            storeFile file("debug.keystore")
-            storePassword "android"
-            keyAlias "androiddebugkey"
-            keyPassword "android"
-        }
-        release {
-            storeFile file("debug.keystore")
-            storePassword "android"
-            keyAlias "androiddebugkey"
-            keyPassword "android"
-        }
-    }
-
     buildTypes {
         debug {
-            signingConfig signingConfigs.debug
-        }
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            // Désactiver le signing pour debug
+            signingConfig null
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

@@ -9,31 +9,24 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      
+    - uses: actions/checkout@v4
+    
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v2
-      with:
-        api-level: 35
-        build-tools-version: '35.0.0'
-        
-    - name: Build Release AAB
+    - name: Setup Android
+      uses: android-actions/setup-android@v3
+      
+    - name: Build AAB
       run: |
-        ./gradlew clean bundleRelease --no-daemon --stacktrace
+        chmod +x gradlew
+        ./gradlew bundleDebug
         
-    - name: Build Debug AAB
-      run: |
-        ./gradlew clean bundleDebug --no-daemon
-        
-    - name: Upload All Bundles
+    - name: Upload AAB
       uses: actions/upload-artifact@v4
       with:
-        name: app-bundles
-        path: app/build/outputs/bundle/
+        name: app-bundle
+        path: app/build/outputs/bundle/debug/app-debug.aab
