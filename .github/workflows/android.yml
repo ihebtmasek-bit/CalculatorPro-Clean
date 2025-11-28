@@ -12,10 +12,10 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       
     - name: Set up JDK 11
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '11'
         distribution: 'temurin'
@@ -26,29 +26,40 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
-    - name: Build with Gradle
+    - name: Build Debug APK & AAB
       run: |
         ./gradlew assembleDebug
         ./gradlew bundleDebug
         
-    - name: Build Release AAB
+    - name: Build Release AAB (Signed)
       run: |
+        # Créer un keystore de debug pour les tests
+        keytool -genkey -v -keystore debug.keystore \
+          -storepass android -alias androiddebugkey \
+          -keypass android -keyalg RSA -keysize 2048 \
+          -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+        
         ./gradlew bundleRelease
       env:
-        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        SIGNING_KEY_PASSPHRASE: ${{ secrets.SIGNING_KEY_PASSPHRASE }}
-        ALIAS: ${{ secrets.ALIAS }}
-        ALIAS_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
-        KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+        KEY_STORE_FILE: debug.keystore
+        KEY_STORE_PASSWORD: android
+        ALIAS: androiddebugkey
+        ALIAS_PASSWORD: android
         
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
+    - name: Upload Debug APK
+      uses: actions/upload-artifact@v4
       with:
-        name: app-apk
-        path: app/build/outputs/apk/
+        name: debug-apk
+        path: app/build/outputs/apk/debug/
         
-    - name: Upload AAB
-      uses: actions/upload-artifact@v3
+    - name: Upload Debug AAB
+      uses: actions/upload-artifact@v4
       with:
-        name: app-aab
-        path: app/build/outputs/bundle/
+        name: debug-aab
+        path: app/build/outputs/bundle/debug/
+        
+    - name: Upload Release AAB
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-aab
+        path: app/build/outputs/bundle/release/
