@@ -3,37 +3,27 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
     namespace 'com.zcalculator.app'
 
     defaultConfig {
         applicationId "com.zcalculator.app"
         minSdk 21
         targetSdk 35
-        versionCode 9
-        versionName "2.2"
-    }
-
-    signingConfigs {
-        release {
-            storeFile file('calculator.keystore')
-            storePassword 'calculator123'
-            keyAlias 'calculator'
-            keyPassword 'calculator123'
-        }
+        versionCode 1
+        versionName "1.0"
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
 
-    // DÉSACTIVER AAPT2 POUR ÉVITER LES ERREURS
-    aaptOptions {
-        useNewCruncher false
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

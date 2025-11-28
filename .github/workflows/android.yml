@@ -1,4 +1,4 @@
-name: Android Build API 35
+name: Android Build
 
 on:
   push:
@@ -11,39 +11,22 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up JDK 17
+    - name: Set up JDK 11
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '11'
         distribution: 'temurin'
         
-    - name: Setup Android SDK 34
+    - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
-    - name: Build Universal APK
+    - name: Build APK
       run: |
         chmod +x gradlew
         ./gradlew assembleRelease
         
-    - name: Convert APK to AAB using bundletool
-      run: |
-        # Télécharger bundletool
-        wget https://github.com/google/bundletool/releases/download/1.15.6/bundletool-all-1.15.6.jar
-        
-        # Créer un AAB à partir de l'APK
-        java -jar bundletool-all-1.15.6.jar build-bundle \
-          --modules=app/build/outputs/apk/release/app-release.apk \
-          --output=app/build/outputs/bundle/converted/app-converted.aab \
-          --overwrite
-          
-    - name: Upload Universal APK
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: calculator-universal-apk
+        name: app-release
         path: app/build/outputs/apk/release/app-release.apk
-        
-    - name: Upload Converted AAB
-      uses: actions/upload-artifact@v4
-      with:
-        name: calculator-converted-aab
-        path: app/build/outputs/bundle/converted/app-converted.aab
