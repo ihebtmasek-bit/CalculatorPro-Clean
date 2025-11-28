@@ -17,7 +17,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Setup Android SDK
+    - name: Setup Android SDK 36
       uses: android-actions/setup-android@v3
       
     - name: Build Release AAB
@@ -28,5 +28,5 @@ jobs:
     - name: Upload AAB
       uses: actions/upload-artifact@v4
       with:
-        name: calculator-aab
+        name: calculator-aab-api36
         path: app/build/outputs/bundle/release/

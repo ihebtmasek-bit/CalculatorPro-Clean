@@ -3,15 +3,15 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdk 34  # Compiler avec une version stable
     namespace 'com.zcalculator.app'
 
     defaultConfig {
         applicationId "com.zcalculator.app"
         minSdk 21
-        targetSdk 35
-        versionCode 5
-        versionName "1.4"
+        targetSdk 34  # Target égal à compile pour stabilité
+        versionCode 9
+        versionName "2.2"
     }
 
     signingConfigs {
@@ -34,6 +34,14 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    
+    // Override pour Google Play
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
+            output.versionCodeOverride = versionCodes.get(output.getFilter("ABI"), 0) * 1000000 + defaultConfig.versionCode
+        }
     }
 }
 
