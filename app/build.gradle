@@ -16,7 +16,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('../calculator.keystore')
+            storeFile file('calculator.keystore')
             storePassword 'calculator123'
             keyAlias 'calculator'
             keyPassword 'calculator123'
@@ -39,5 +39,4 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
 }
