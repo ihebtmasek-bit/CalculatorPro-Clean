@@ -14,17 +14,27 @@ android {
         versionName "1.0"
     }
 
+    signingConfigs {
+        release {
+            // Ces variables seront injectées par GitHub Actions
+            storeFile file("${System.env.KEY_STORE_FILE ?: 'debug.keystore'}")
+            storePassword System.env.KEY_STORE_PASSWORD ?: "android"
+            keyAlias System.env.ALIAS ?: "androiddebugkey"
+            keyPassword System.env.ALIAS_PASSWORD ?: "android"
+        }
+    }
+
     buildTypes {
         debug {
-            // Signé automatiquement par le keystore debug d'Android
+            // Signé automatiquement par le keystore debug
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            // Ne pas configurer signingConfig pour release - on utilise debug pour tester
+            signingConfig signingConfigs.release
         }
     }
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -33,4 +43,5 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.webkit:webkit:1.6.0'
 }
