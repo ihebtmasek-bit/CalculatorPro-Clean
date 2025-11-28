@@ -16,7 +16,6 @@ android {
 
     signingConfigs {
         release {
-            // Ces variables seront injectées par GitHub Actions
             storeFile file("${System.env.KEY_STORE_FILE ?: 'debug.keystore'}")
             storePassword System.env.KEY_STORE_PASSWORD ?: "android"
             keyAlias System.env.ALIAS ?: "androiddebugkey"
@@ -26,7 +25,7 @@ android {
 
     buildTypes {
         debug {
-            // Signé automatiquement par le keystore debug
+            // Build debug simple
         }
         release {
             minifyEnabled false
@@ -40,13 +39,13 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    buildFeatures {
-        viewBinding true
+    // Désactiver aapt2 si problème
+    aaptOptions {
+        ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
     }
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.webkit:webkit:1.10.0'
-    implementation 'com.google.android.material:material:1.12.0'
 }

@@ -2,9 +2,8 @@ package com.zcalculator.app;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 public class MainActivity extends Activity {
     @Override
@@ -13,21 +12,18 @@ public class MainActivity extends Activity {
         
         WebView webView = new WebView(this);
         
+        // Configuration hors ligne
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setAllowFileAccess(true);
-        webSettings.setAllowContentAccess(true);
         
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-        });
+        // Désactiver le cache réseau pour forcer le local
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         
-        webView.loadUrl("file:///android_asset/index.html");
+        // Charger depuis les assets (hors ligne)
+        webView.loadUrl("file:///android_asset/calculator.html");
+        
         setContentView(webView);
     }
 }
