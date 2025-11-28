@@ -23,30 +23,17 @@ jobs:
       with:
         api-level: 35
         build-tools-version: '35.0.0'
-        cmdline-tools-version: '12.0'
-        extra-systems: 'android-35'
         
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      
     - name: Build Release AAB
       run: |
-        # Créer keystore de debug
-        keytool -genkey -v -keystore debug.keystore \
-          -storepass android -alias androiddebugkey \
-          -keypass android -keyalg RSA -keysize 2048 \
-          -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
-        
         ./gradlew clean bundleRelease --no-daemon --stacktrace
         
-    - name: Upload Release AAB
-      uses: actions/upload-artifact@v4
-      with:
-        name: release-aab
-        path: app/build/outputs/bundle/release/
+    - name: Build Debug AAB
+      run: |
+        ./gradlew clean bundleDebug --no-daemon
         
-    - name: Upload Debug AAB  
+    - name: Upload All Bundles
       uses: actions/upload-artifact@v4
       with:
-        name: debug-aab
-        path: app/build/outputs/bundle/debug/
+        name: app-bundles
+        path: app/build/outputs/bundle/

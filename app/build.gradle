@@ -3,29 +3,35 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdk 34  // Temporairement API 34 pour stabilité
     namespace 'com.zcalculator.app'
 
     defaultConfig {
         applicationId "com.zcalculator.app"
         minSdk 21
-        targetSdk 35
+        targetSdk 34  // Temporairement API 34
         versionCode 1
         versionName "1.0"
     }
 
     signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
         release {
-            storeFile file("${System.env.KEY_STORE_FILE ?: 'debug.keystore'}")
-            storePassword System.env.KEY_STORE_PASSWORD ?: "android"
-            keyAlias System.env.ALIAS ?: "androiddebugkey"
-            keyPassword System.env.ALIAS_PASSWORD ?: "android"
+            storeFile file("debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
         }
     }
 
     buildTypes {
         debug {
-            // Build debug simple
+            signingConfig signingConfigs.debug
         }
         release {
             minifyEnabled false
@@ -37,11 +43,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
-    }
-
-    // Désactiver aapt2 si problème
-    aaptOptions {
-        ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
     }
 }
 
